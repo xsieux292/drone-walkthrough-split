@@ -1,0 +1,59 @@
+@use '../step-common' as *;
+
+// STEP 3.3.6 stage: light background, clip + cards.
+:host { @include stage-host; background: radial-gradient(ellipse at 20% 0%, #dfe9ff 0, #f5f8fd 55%); }
+
+$ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+/* ---- flight clip: three positions, one per layout ---- */
+.video {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #0b1220;
+  box-shadow: 0 30px 60px -20px rgba(9, 20, 45, 0.5);
+  transition: all 0.7s $ease;
+  dw-media-slot { position: absolute; inset: 0; --dw-media-fit: contain; }
+}
+.at-video { left: 140px; top: 40px; width: 680px; height: 510px; } // beat 0: big, centred
+.at-table, .at-files { left: 30px; top: 40px; width: 440px; height: 330px; } // beats 1-2: top-left
+
+.rec {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font: 700 11px var(--dw-mono);
+  letter-spacing: 0.1em;
+  i { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: dw-blink 1.2s infinite; }
+}
+
+/* ---- score table: right of the clip ---- */
+.score {
+  position: absolute;
+  left: 500px;
+  top: 40px;
+  width: 430px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.6s $ease;
+  &.on { opacity: 1; transform: none; }
+}
+
+/* ---- files: under the clip, full width ---- */
+.files {
+  position: absolute;
+  left: 30px;
+  top: 392px;
+  width: 900px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s $ease;
+  &.on { opacity: 1; transform: none; }
+}

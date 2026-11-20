@@ -1,0 +1,24 @@
+<!-- STEP 3.3.2 stage layout. Timeline: step-dataset.ts · parts: parts/hf-page.*, parts/download-terminal.ts -->
+<dw-browser-frame class="browser" [url]="url()" [dark]="true">
+  <!-- mock Hugging Face page -->
+  <dw-hf-page
+    [owner]="content().owner"
+    [repo]="content().repo"
+    [license]="content().license"
+    [files]="content().files"
+    [access]="access()"
+    [rows]="rows()"
+    [toast]="toast()"
+  />
+
+  <!-- download terminal (slides up on beat 3) -->
+  <dw-download-terminal [open]="terminal()" [command]="content().downloadCommand" [typed]="typed()" [progress]="progress()" [fileName]="bigFile()" />
+
+  <!-- real screenshot overlay (beat 4). Image now; set content.dataset.media.kind = 'video' for a clip -->
+  <div class="real" [class.on]="real()">
+    <dw-media-slot [media]="content().media" [playing]="active() && real()" emptyLabel="ภาพหน้า Hugging Face จริง" />
+    <span class="real-label">ภาพหน้าจริง</span>
+  </div>
+</dw-browser-frame>
+
+<dw-cursor [x]="cursor().x" [y]="cursor().y" [visible]="cursor().show" [clicking]="cursor().click" />

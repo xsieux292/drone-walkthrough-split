@@ -1,0 +1,134 @@
+@use '../../step-common' as *;
+
+// Fills the browser body (900×516). Dark Hugging Face colours.
+:host {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: #0b0f19;
+  color: #e5e7eb;
+  font-family: 'Source Sans 3', var(--dw-font);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.skel { display: inline-block; height: 10px; border-radius: 5px; background: #374151; }
+
+/* ---- nav bar ---- */
+.hf-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 44px;
+  padding: 0 18px;
+  border-bottom: 1px solid #1f2937;
+  .logo { font-weight: 700; font-size: 15px; b { font-size: 18px; } }
+  .search { flex: 0 0 240px; padding: 5px 10px; border-radius: 8px; background: #111827; color: #6b7280; font-size: 12px; }
+  nav { display: flex; gap: 16px; margin-left: auto; color: #9ca3af; font-size: 12px; }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #60a5fa); }
+}
+
+/* ---- repo title + tags + tabs ---- */
+.repo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 22px 6px;
+  font-size: 17px;
+  .kind { color: #9ca3af; font-size: 14px; }
+  .owner, .slash { color: #9ca3af; }
+  b { font-family: var(--dw-mono); font-size: 16px; }
+  .like { margin-left: 10px; padding: 1px 8px; border: 1px solid #374151; border-radius: 6px; font-size: 11px; color: #9ca3af; }
+}
+.tags {
+  display: flex;
+  gap: 8px;
+  padding: 4px 22px 10px;
+  span { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 6px; background: #111827; border: 1px solid #1f2937; font-size: 11px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .g { background: #22c55e; }
+  .r { background: #ef4444; }
+  .lic { color: #d1d5db; }
+}
+.tabs {
+  display: flex;
+  gap: 24px;
+  padding: 0 22px;
+  border-bottom: 1px solid #1f2937;
+  span { padding: 10px 0; color: #9ca3af; }
+  .on { color: #fff; border-bottom: 2px solid #fff; }
+}
+
+/* ---- file list ---- */
+.files {
+  margin: 14px 22px;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: filter 0.5s, opacity 0.5s;
+  &.locked { filter: blur(3px); opacity: 0.35; }
+}
+.fhead { display: flex; gap: 12px; padding: 9px 14px; background: #111827; color: #9ca3af; font-size: 12px; .branch { color: #e5e7eb; } }
+.row {
+  display: grid;
+  grid-template-columns: 22px 1fr 90px 30px;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-top: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.35s, transform 0.35s;
+  &.in { opacity: 1; transform: none; }
+  .ico { color: #6b7280; }
+  .name { font-family: var(--dw-mono); font-size: 12px; }
+  .size { color: #9ca3af; text-align: right; font-size: 12px; }
+  .dl { text-align: right; color: #9ca3af; }
+}
+
+/* ---- gate box: centred at body (450, 280); its button sits ~36 px below centre ---- */
+.gate {
+  position: absolute;
+  left: 50%;
+  top: 280px;
+  width: 520px;
+  transform: translate(-50%, -50%);
+  padding: 22px 24px;
+  border: 1px solid #374151;
+  border-radius: 14px;
+  background: #111827;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  h5 { margin: 0 0 6px; font-size: 16px; }
+  p { margin: 0 0 16px; color: #9ca3af; }
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 9px;
+    background: #f9fafb;
+    color: #111827;
+    font: 600 14px var(--dw-font);
+    &.loading { opacity: 0.75; }
+  }
+  .spin { @include spinner(12px, #111827); }
+}
+
+/* ---- "Access granted" toast ---- */
+.toast {
+  position: absolute;
+  right: 18px;
+  top: 58px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: #052e1a;
+  border: 1px solid #16a34a;
+  color: #86efac;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: all 0.35s;
+  &.on { opacity: 1; transform: none; }
+}

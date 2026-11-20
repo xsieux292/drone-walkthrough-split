@@ -1,0 +1,74 @@
+// Colours follow manual.tex: black!5 (plain), okc!12 (lib), okc!25 + thick okc border (main),
+// acc!15 (rules), okc!12 dashed (optional). Panel fill = the manual's "soft" beige.
+:host {
+  --tar-ok: #2f9a5a; // okc
+  --tar-acc: #e8a33a; // acc
+  --tar-soft: #f3f2ec; // panel fill
+  --tar-box-w: 46%; // file box width (manual: 48 mm of 135 mm)
+  display: block;
+  font-family: var(--dw-font);
+  color: var(--dw-fg);
+}
+
+.box {
+  position: relative;
+  padding: 34px 16px 12px;
+  border: 1.5px solid #b9b7ae;
+  border-radius: 14px;
+  background: var(--tar-soft);
+}
+.title { position: absolute; left: 16px; top: 8px; font: 700 14px var(--dw-mono); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 7px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s, transform 0.3s;
+  &.in { opacity: 1; transform: none; }
+}
+
+.file {
+  flex: 0 0 var(--tar-box-w);
+  box-sizing: border-box;
+  padding: 7px 10px;
+  border: 1.2px solid #8e8e8e;
+  border-radius: 7px;
+  font: 500 12.5px var(--dw-mono);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.e-plain { background: #f2f2f2; }
+.e-lib { background: color-mix(in srgb, var(--tar-ok) 12%, #fff); }
+.e-main { background: color-mix(in srgb, var(--tar-ok) 25%, #fff); border: 2.4px solid var(--tar-ok); }
+.e-rules { background: color-mix(in srgb, var(--tar-acc) 15%, #fff); }
+.e-optional { background: color-mix(in srgb, var(--tar-ok) 12%, #fff); border-style: dashed; font-family: var(--dw-font); }
+
+.note { font-size: 13px; line-height: 1.35; b { font-weight: 700; } }
+code { font: 12px var(--dw-mono); }
+
+.rules {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--dw-muted);
+  opacity: 0;
+  transition: opacity 0.4s;
+  &.in { opacity: 1; }
+  li { margin: 2px 0; }
+  b { color: var(--dw-fg); }
+}
+
+/* compact: for the upload page where space is tight */
+:host(.compact) {
+  .box { padding: 30px 12px 8px; }
+  .title { font-size: 13px; top: 7px; left: 12px; }
+  .row { gap: 10px; margin: 5px 0; }
+  .file { padding: 5px 8px; font-size: 11.5px; }
+  .note { font-size: 11.5px; }
+  .rules { font-size: 11px; margin-top: 6px; }
+}

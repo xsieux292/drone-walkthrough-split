@@ -1,0 +1,11 @@
+<!-- STEP 3.3.6 stage layout: flight clip (moves between .at-* positions) · score table · result files -->
+
+<!-- flight clip: video now (sample); content.results.video -->
+<div [class]="'video at-' + layout()">
+  <dw-media-slot [media]="content().video" [playing]="active()" emptyLabel="คลิปบินจริง" />
+  <span class="rec"><i></i> FLIGHT</span>
+</div>
+
+<dw-score-table class="score" [class.on]="layout() !== 'video'" [scores]="content().scores" [sample]="content().scoresAreSample" [count]="count()" />
+
+<dw-result-files class="files" [class.on]="layout() === 'files'" [files]="content().files" [shown]="filesShown()" />

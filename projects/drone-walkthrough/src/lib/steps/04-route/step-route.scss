@@ -1,0 +1,60 @@
+@use '../step-common' as *;
+
+// STEP 3.3.4 stage: dark planner UI.
+:host { @include stage-host; background: #10141d; color: #e8ecf4; }
+
+/* ---- header bar (HEADER = 44 in route-geometry.ts) ---- */
+.top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  background: #171c27;
+  border-bottom: 1px solid #262d3c;
+  font-size: 13px;
+  > b { font-size: 16px; }
+  .meta { color: #9aa5ba; b { color: #e8ecf4; } }
+  .team { margin-left: auto; color: #9aa5ba; }
+}
+.save {
+  height: 30px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 7px;
+  background: #ffd21f;
+  color: #1a1600;
+  font: 700 13px var(--dw-font);
+  transition: background 0.3s;
+  &.done { background: #22c55e; color: #03210f; }
+}
+
+/* ---- where the parts sit ---- */
+.map { left: 0; top: 44px; }
+.side { left: 680px; top: 44px; }
+
+/* ---- mission.kml toast (after save) ---- */
+.kml {
+  position: absolute;
+  right: 20px;
+  top: 64px;
+  z-index: 5;
+  width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f1b33;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+  &.on { opacity: 1; transform: none; }
+  .k-ico { padding: 10px 8px; border-radius: 6px; background: #ffd21f; font: 800 12px var(--dw-mono); }
+  b { display: block; font-family: var(--dw-mono); }
+  small { color: #5b6b84; font-size: 12px; }
+}

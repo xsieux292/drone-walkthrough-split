@@ -1,0 +1,71 @@
+<!-- PART train-viz. Left → right: conveyor of dataset images · flow dots · RF-DETR block · flow dots · preview + stats -->
+
+<!-- ① dataset images (real frames from datasets/03_yolo_format) -->
+<div class="col-label">ภาพจาก dataset</div>
+<div class="conveyor">
+  <div class="belt">
+    @for (img of conveyor(); track $index) {
+      <img [src]="img.src | dwAsset" alt="" />
+    }
+  </div>
+</div>
+<div class="flow f1"><i></i><i></i><i></i></div>
+
+<!-- ② model block (layer names: edit here) -->
+<div class="model">
+  <div class="m-title">{{ train().model }}</div>
+  <div class="layer">Backbone · DINOv2</div>
+  <div class="layer">Multi-scale projector</div>
+  <div class="layer">Transformer decoder</div>
+  <div class="layer">Heads · box + class</div>
+  <div class="m-foot">fine-tune · truck</div>
+</div>
+<div class="flow f2"><i></i><i></i><i></i></div>
+
+<!-- ③ preview: image + label box (dashed white) + model's guess (green) -->
+<div class="preview">
+  @if (preview(); as p) {
+    <img [src]="p.src | dwAsset" alt="ภาพตัวอย่างจาก dataset" />
+  }
+  <svg [attr.viewBox]="'0 0 ' + PREVIEW.w + ' ' + PREVIEW.h" preserveAspectRatio="none">
+    @for (b of gtBoxes(); track $index) {
+      <rect class="gt" [attr.x]="b.x" [attr.y]="b.y" [attr.width]="b.w" [attr.height]="b.h" />
+    }
+    @if (progress() > 0) {
+      @for (b of predBoxes(); track $index) {
+        <rect class="pred" [attr.x]="b.x" [attr.y]="b.y" [attr.width]="b.w" [attr.height]="b.h" />
+        <g [attr.transform]="'translate(' + b.x + ',' + (b.y - 16) + ')'">
+          <rect class="tag" width="78" height="15" rx="2" />
+          <text x="4" y="11">truck {{ confidence().toFixed(2) }}</text>
+        </g>
+      }
+    }
+  </svg>
+  <span class="legend"><i class="lg-gt"></i>label จริง <i class="lg-pred"></i>โมเดลทาย</span>
+</div>
+
+<!-- ④ epoch counter -->
+<div class="epoch">
+  <span>Epoch</span>
+  <b>{{ epoch() }}</b><small>/ {{ train().epochs }}</small>
+  <div class="ebar"><i [style.width.%]="progress() * 100"></i></div>
+</div>
+
+<!-- ⑤ mini charts -->
+<div class="chart ch1">
+  <div class="ch-h"><span>loss</span><b>{{ progress() > 0 ? lossNow().toFixed(3) : '' }}</b></div>
+  <svg [attr.viewBox]="'0 0 ' + CHART.w + ' ' + CHART.h"><path class="axis" d="M0 55.5H180" /><path class="loss" [attr.d]="lossPath()" /></svg>
+</div>
+<div class="chart ch2">
+  <div class="ch-h"><span>mAP&#64;50</span><b>{{ progress() > 0 ? mapNow().toFixed(2) : '' }}</b></div>
+  <svg [attr.viewBox]="'0 0 ' + CHART.w + ' ' + CHART.h"><path class="axis" d="M0 55.5H180" /><path class="map" [attr.d]="mapPath()" /></svg>
+</div>
+@if (train().metricsAreIllustrative) {
+  <div class="illus">กราฟและตัวเลขเป็นภาพจำลอง ไม่ใช่ผลเทรนจริง</div>
+}
+
+<!-- ⑥ finished weights -->
+<div class="weights" [class.on]="weights()">
+  <span class="w-ico">⬢</span>
+  <div><b>{{ train().weightsName }}</b><small>✓ เทรนเสร็จ · พร้อมใส่ใน tar</small></div>
+</div>

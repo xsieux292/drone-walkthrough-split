@@ -1,0 +1,49 @@
+<!-- PART code-editor: background glows · floating chips · IDE window (title bar, explorer, tabs, code, terminal) -->
+
+<!-- background glows -->
+<i class="glow g1"></i><i class="glow g2"></i>
+
+<!-- floating chips around the window (edit text here) -->
+<div class="chip c1">🤗 dataset</div>
+<div class="chip c2"><b>RF-DETR</b> fine-tune</div>
+<div class="chip c3">🐍 Python</div>
+<div class="chip c4">✈ my_agent.py</div>
+
+<!-- IDE window: grid = [explorer | tabs / code / terminal] -->
+<div class="ide">
+  <div class="ide-bar"><span class="dots"><i></i><i></i><i></i></span><span class="ide-title">{{ project() }} — {{ file()?.name }}</span></div>
+
+  <aside class="tree">
+    <div class="t-h">EXPLORER</div>
+    <div class="t-d">▾ {{ project() }}</div>
+    <div class="t-f t-dir">▸ data</div>
+    <div class="t-f t-dir">▸ runs</div>
+    @for (f of files(); track f.name; let i = $index) {
+      <div class="t-f" [class.on]="i === fileIndex()">{{ f.name }}</div>
+    }
+    <div class="t-f">Dockerfile</div>
+    <div class="t-f">mission.kml</div>
+    <div class="t-f">requirements.txt</div>
+  </aside>
+
+  <div class="tabs">
+    @for (f of files(); track f.name; let i = $index) {
+      <span [class.on]="i === fileIndex()">{{ f.name }}</span>
+    }
+  </div>
+
+  <!-- code area: gutter + highlighted tokens (no template whitespace inside <pre>) -->
+  <div class="code">
+    <div class="gutter">
+      @for (n of lineNumbers(); track n) { <span>{{ n }}</span> }
+    </div>
+    <pre><code>@for (t of visible(); track $index) {<span [class]="t.kind">{{ t.text }}</span>}<span class="caret"></span></code></pre>
+  </div>
+
+  <div class="term">
+    <div class="term-h">TERMINAL</div>
+    @for (line of terminal(); track $index; let i = $index) {
+      @if (i < termLines()) { <div class="tl" [class.cmd]="line.startsWith('$')">{{ line }}</div> }
+    }
+  </div>
+</div>

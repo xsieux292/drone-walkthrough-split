@@ -1,0 +1,26 @@
+<!-- PART tar-upload: header · drop zone (collapses after drop) · tar file list · checks card -->
+<header><h4>ส่งงาน · {{ teamName() }}</h4></header>
+
+<!-- ① drop zone -->
+<div class="drop" [class.hover]="hover()" [class.filled]="filesShown() > 0">
+  @if (filesShown() === 0) {
+    <span class="d-ico">⤓</span>
+    <b>ลากไฟล์ .tar มาวางที่นี่</b>
+    <small>โค้ด + weights + mission.kml ในไฟล์เดียว</small>
+  }
+</div>
+
+<!-- ② files inside the tar: the manual's diagram, redrawn (shared/tar-contents.ts) -->
+<dw-tar-contents class="files" [class.hidden]="filesShown() === 0" [compact]="true" [tarName]="tarName()" [files]="tarFiles()" [rules]="tarRules()" [shown]="filesShown()" />
+
+<!-- ③ checks / build -->
+<div class="checks">
+  <div class="c-h"><b>ตรวจและ build</b><span>{{ checkPct().toFixed(0) }}%</span></div>
+  <div class="c-bar"><i [style.width.%]="checkPct()"></i></div>
+  @for (c of buildChecks(); track c; let i = $index) {
+    <div [class]="'check c-' + (checks()[i] ?? 'idle')">
+      <span class="ci">@if (checks()[i] === 'run') {<span class="spin"></span>} @else if (checks()[i] === 'ok') {✓} @else {○}</span>{{ c }}
+    </div>
+  }
+  <div class="ready" [class.on]="ready()">✓ พร้อมบิน · ระบบนำโค้ดขึ้นโดรนตามคิว</div>
+</div>

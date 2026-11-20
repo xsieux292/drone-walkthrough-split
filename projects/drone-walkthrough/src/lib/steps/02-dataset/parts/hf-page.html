@@ -1,0 +1,50 @@
+<!-- PART hf-page: mock Hugging Face dataset page. Top to bottom: nav bar · repo title · tags · tabs · file list · (gate) · (toast) -->
+
+<!-- nav bar -->
+<div class="hf-top">
+  <span class="logo"><b>🤗</b> Hugging Face</span>
+  <span class="search">Search models, datasets, users…</span>
+  <nav><span>Models</span><span>Datasets</span><span>Spaces</span><span>Docs</span><span>Pricing</span></nav>
+  <span class="avatar"></span>
+</div>
+
+<!-- repo title: Datasets: owner/repo -->
+<div class="repo">
+  <span class="kind">Datasets:</span>
+  @if (owner()) { <span class="owner">{{ owner() }}</span> } @else { <i class="skel" style="width: 80px"></i> }
+  <span class="slash">/</span>
+  <b>{{ repo() }}</b>
+  <span class="like">♡ like</span>
+</div>
+
+<!-- tags (modalities, languages, licence) -->
+<div class="tags">
+  <span><i class="dot g"></i>Image</span><span><i class="dot r"></i>Text</span><span><i class="dot g"></i>English</span><span><i class="dot g"></i>Thai</span>
+  <span class="lic">🔒 {{ license() }}</span>
+</div>
+
+<div class="tabs"><span>Dataset card</span><span class="on">Files and versions</span><span>Community</span></div>
+
+<!-- file list: blurred until access is granted, rows slide in -->
+<div class="files" [class.locked]="access() !== 'granted'">
+  <div class="fhead"><span class="branch">main ▾</span><span>{{ repo() }}</span></div>
+  @for (f of files(); track f.name; let i = $index) {
+    <div class="row" [class.in]="i < rows()">
+      <span class="ico">▤</span><span class="name">{{ f.name }}</span>
+      <span class="size">{{ f.size }}</span><span class="dl">⤓</span>
+    </div>
+  }
+</div>
+
+<!-- gate box (locked / loading only) -->
+@if (access() !== 'granted') {
+  <div class="gate">
+    <h5>🔒 This dataset is gated</h5>
+    <p>You need to agree to share your contact information to access this dataset</p>
+    <button type="button" tabindex="-1" [class.loading]="access() === 'loading'">
+      @if (access() === 'loading') { <span class="spin"></span> } Agree and access repository
+    </button>
+  </div>
+}
+
+<div class="toast" [class.on]="toast()">✓ Access granted · ทีมได้สิทธิ์เข้าถึงแล้ว</div>

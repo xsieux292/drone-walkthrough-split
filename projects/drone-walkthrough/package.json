@@ -1,0 +1,14 @@
+{
+  "name": "drone-walkthrough",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^22.3.0",
+    "@angular/core": "^22.3.0",
+    "@angular/platform-browser": "^22.3.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
+  "description": "Animated walkthrough of the NT Drone competition steps (3.3.1-3.3.6) as Angular components"
+}

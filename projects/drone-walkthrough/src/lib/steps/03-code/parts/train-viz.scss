@@ -1,0 +1,155 @@
+@use '../../step-common' as *;
+
+// Whole 960×600 scene. Columns: conveyor x30 · model x236 · preview/stats x500.
+:host { position: absolute; inset: 0; display: block; background: radial-gradient(ellipse at 30% 0%, #13214f 0, #070b18 55%); color: #e6ecff; }
+
+/* ---- ① conveyor ---- */
+.col-label { position: absolute; left: 30px; top: 24px; font-size: 13px; color: #8fa0cc; letter-spacing: 0.03em; }
+.conveyor {
+  position: absolute;
+  left: 30px;
+  top: 50px;
+  width: 150px;
+  height: 520px;
+  overflow: hidden;
+  border-radius: 12px;
+  mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+}
+.belt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  img { width: 150px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #22305c; }
+}
+:host(.feeding) .belt { animation: belt 14s linear infinite; } // speed of the conveyor
+@keyframes belt { to { transform: translateY(-50%); } }
+
+/* flow dots between columns */
+.flow {
+  position: absolute;
+  top: 300px;
+  display: flex;
+  gap: 10px;
+  i { width: 8px; height: 8px; border-radius: 50%; background: #4d7cff; opacity: 0.2; }
+}
+.f1 { left: 192px; }
+.f2 { left: 450px; }
+:host(.feeding) .flow i { animation: dot 1.2s infinite; &:nth-child(2) { animation-delay: 0.2s; } &:nth-child(3) { animation-delay: 0.4s; } }
+@keyframes dot { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+/* ---- ② model block ---- */
+.model {
+  position: absolute;
+  left: 236px;
+  top: 150px;
+  width: 200px;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, #182a63, #0f1a3d);
+  border: 1px solid #2c4185;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  .m-title { margin-bottom: 12px; font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #8fb3ff, #5fe1ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .layer { margin: 7px 0; padding: 8px 6px; border-radius: 9px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(143, 179, 255, 0.18); font-size: 12px; color: #c7d3f7; }
+  .m-foot { margin-top: 10px; font-size: 11px; color: #7f8fbb; }
+}
+// layers light up top → bottom while feeding
+:host(.feeding) .model {
+  animation: dw-pulse 2s infinite;
+  .layer { animation: layer 1.6s infinite; }
+  .layer:nth-child(3) { animation-delay: 0.2s; }
+  .layer:nth-child(4) { animation-delay: 0.4s; }
+  .layer:nth-child(5) { animation-delay: 0.6s; }
+}
+@keyframes layer { 0%, 100% { background: rgba(255, 255, 255, 0.05); } 40% { background: rgba(77, 124, 255, 0.35); border-color: #6d95ff; } }
+
+/* ---- ③ preview ---- */
+.preview {
+  position: absolute;
+  left: 500px;
+  top: 40px;
+  width: 400px;
+  height: 225px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2c4185;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  img, svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .gt { fill: none; stroke: #fff; stroke-width: 1.2; stroke-dasharray: 4 3; opacity: 0.7; }   // ground-truth label
+  .pred { fill: rgba(57, 255, 136, 0.08); stroke: #39ff88; stroke-width: 2; transition: all 0.25s; } // model's guess
+  .tag { fill: #39ff88; }
+  text { font: 700 10px var(--dw-mono); fill: #04210f; }
+}
+.legend {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  font-size: 11px;
+  i { width: 14px; height: 0; margin-left: 4px; }
+  .lg-gt { border-top: 1.5px dashed #fff; }
+  .lg-pred { border-top: 2px solid #39ff88; }
+}
+
+/* ---- ④ epoch ---- */
+.epoch {
+  position: absolute;
+  left: 500px;
+  top: 284px;
+  width: 400px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  span { font-size: 14px; color: #8fa0cc; }
+  b { font: 700 38px/1 var(--dw-mono); }
+  small { color: #8fa0cc; font-size: 16px; }
+  .ebar { flex-basis: 100%; height: 6px; margin-top: 4px; border-radius: 3px; background: #1a2550; overflow: hidden; i { display: block; height: 100%; background: linear-gradient(90deg, #4d7cff, #5fe1ff); } }
+}
+
+/* ---- ⑤ charts ---- */
+.chart {
+  position: absolute;
+  top: 360px;
+  width: 190px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #1e2a4d;
+  svg { display: block; width: 180px; height: 56px; overflow: visible; }
+  .axis { stroke: #2a3766; }
+  path.loss, path.map { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .loss { stroke: #ff7a90; }
+  .map { stroke: #5fe1ff; }
+}
+.ch1 { left: 500px; }
+.ch2 { left: 710px; }
+.ch-h { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; color: #8fa0cc; b { font-family: var(--dw-mono); color: #e6ecff; } }
+.illus { position: absolute; left: 500px; top: 458px; font-size: 11.5px; color: #ffb35c; }
+
+/* ---- ⑥ weights card ---- */
+.weights {
+  position: absolute;
+  left: 500px;
+  top: 490px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #0f3b2a, #0d2a3d);
+  border: 1px solid #1f8a5b;
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
+  &.on { opacity: 1; transform: none; }
+  .w-ico { font-size: 30px; color: #39ff88; }
+  b { display: block; font: 600 15px var(--dw-mono); }
+  small { color: #8de8b6; font-size: 12.5px; }
+}

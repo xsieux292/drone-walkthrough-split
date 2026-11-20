@@ -1,0 +1,25 @@
+<!-- STEP 3.3.1 stage layout. Timeline: step-register.ts · form card: parts/register-form.* -->
+
+<dw-browser-frame class="browser" [url]="url()">
+  <!-- screen 1: home page (content.register.media). Can be a video: kind 'video' -->
+  <dw-media-slot class="site" [class.on]="page() === 'home'" [media]="content().media" [playing]="active() && page() === 'home'" emptyLabel="ภาพหน้าแรกเว็บไซต์" />
+  <!-- screen 2: /register consent dialog (content.register.consentMedia) -->
+  <dw-media-slot class="site" [class.on]="page() === 'consent'" [media]="content().consentMedia" [playing]="active() && page() === 'consent'" emptyLabel="ภาพหน้าความยินยอม" />
+  <!-- darkens the screenshot while the form card is open -->
+  <div class="dim" [class.on]="card() !== 'hidden'"></div>
+</dw-browser-frame>
+
+<!-- the registration card, placed at CARD (see step-register.ts) -->
+<dw-register-form
+  [style.left.px]="CARD.x"
+  [style.top.px]="CARD.y"
+  [state]="card()"
+  [teamName]="content().teamName"
+  [typed]="typed()"
+  [teamFill]="teamFill()"
+  [memberFill]="memberFill()"
+  [answerFill]="answerFill()"
+  [pressing]="pressing()"
+/>
+
+<dw-cursor [x]="cursor().x" [y]="cursor().y" [visible]="cursor().show" [clicking]="cursor().click" />

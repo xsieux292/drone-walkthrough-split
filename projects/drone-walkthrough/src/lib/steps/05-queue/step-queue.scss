@@ -1,0 +1,51 @@
+@use '../step-common' as *;
+
+// STEP 3.3.5 stage: light dashboard.
+:host { @include stage-host; background: #f3f6fb; }
+
+/* queue / upload pages cross-fade */
+.page { opacity: 0; transition: opacity 0.5s; }
+.page.on { opacity: 1; }
+
+/* ---- draggable tar icon (80 wide; left/top = point − (40, 36)) ---- */
+.tar {
+  position: absolute;
+  z-index: 10;
+  width: 80px;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  // the flight: keep 0.9s in sync with T.dragGlide in step-queue.ts
+  transition: left 0.9s cubic-bezier(0.45, 0.05, 0.25, 1), top 0.9s cubic-bezier(0.45, 0.05, 0.25, 1), transform 0.3s, opacity 0.4s;
+  .t-ico { width: 52px; height: 62px; display: grid; place-items: center; border-radius: 6px 16px 6px 6px; background: linear-gradient(160deg, #ffcf4d, #ff9f1a); color: #3b2500; font: 800 13px var(--dw-mono); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); }
+  small { padding: 1px 6px; border-radius: 4px; background: rgba(15, 27, 51, 0.85); color: #fff; font: 11px var(--dw-mono); }
+  &.t-drag { transform: scale(1.08) rotate(-4deg); }
+  &.t-dropped { opacity: 0; transform: scale(0.6); }
+  &.hidden { opacity: 0; pointer-events: none; }
+}
+
+/* ---- real dashboard overlay ---- */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 27, 51, 0);
+  pointer-events: none;
+  transition: background 0.5s;
+  &.on { background: rgba(15, 27, 51, 0.55); }
+}
+.m-card {
+  width: 640px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  transition: all 0.5s;
+  .media.on & { opacity: 1; transform: none; }
+  dw-media-slot { height: 340px; border-radius: 12px; overflow: hidden; --dw-media-fit: contain; }
+}
+.m-h { margin: 0 0 10px 4px; font-weight: 700; }

@@ -1,0 +1,20 @@
+@use '../step-common' as *;
+
+// STEP 3.3.2 stage: warm highlight top-right (Hugging Face yellow), dark browser in the middle.
+:host { @include stage-host; background: radial-gradient(circle at 80% 10%, #ffe9a8 0, transparent 40%), linear-gradient(160deg, #eaf0ff, #f8fbff 60%); }
+
+.browser { position: absolute; left: 30px; top: 24px; width: 900px; height: 552px; }
+
+/* real screenshot overlay: fades in over the mock page on the last beat */
+.real {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 0.6s, transform 0.6s;
+  pointer-events: none;
+  background: #0b0f19;
+  &.on { opacity: 1; transform: none; }
+  dw-media-slot { position: absolute; inset: 0; --dw-media-fit: contain; }
+}
+.real-label { position: absolute; left: 12px; top: 10px; padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: #0f1b33; font-size: 12px; font-weight: 700; }

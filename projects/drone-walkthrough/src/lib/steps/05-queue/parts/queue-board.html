@@ -1,0 +1,31 @@
+<!-- PART queue-board: header (slot time) · banner · rows -->
+<header>
+  <h4>คิวบิน</h4>
+  <span class="slot">เวลาคิว: @if (slotLabel()) { <b>{{ slotLabel() }}</b> } @else { <i class="skel"></i> }</span>
+</header>
+
+<!-- banner: "wait N teams" → "your turn" -->
+<div class="banner" [class.turn]="yourTurn()">
+  @if (yourTurn()) {
+    <b>ถึงคิวของคุณแล้ว</b><span>ส่งไฟล์ tar ได้เลย</span>
+  } @else {
+    <b>รออีก {{ ahead() }} ทีม</b><span>ระบบจะแจ้งเมื่อถึงคิว</span>
+  }
+</div>
+
+<div class="rows">
+  @for (r of rows(); track r.team) {
+    <div [class]="'row r-' + r.state" [class.you]="r.you">
+      <span class="pos">{{ r.state === 'done' ? '✓' : r.pos + 1 }}</span>
+      <b>{{ r.team }}@if (r.you) { <em>คุณ</em> }</b>
+      <span class="st">
+        @switch (r.state) {
+          @case ('done') { บินเสร็จแล้ว }
+          @case ('flying') { <i class="live"></i> กำลังบิน }
+          @case ('turn') { <i class="live"></i> ถึงคิว }
+          @default { รอคิว }
+        }
+      </span>
+    </div>
+  }
+</div>

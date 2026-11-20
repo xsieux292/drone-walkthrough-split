@@ -1,0 +1,15 @@
+@use '../step-common' as *;
+
+// STEP 3.3.1 stage: soft blue background, browser window filling the canvas.
+:host { @include stage-host; background: linear-gradient(160deg, #e9f0ff, #f8fbff 60%); }
+
+/* browser window: 900×552 at (30, 24); its body (900×516) starts at stage y 60 */
+.browser { position: absolute; left: 30px; top: 24px; width: 900px; height: 552px; }
+
+/* the two screenshots cross-fade (.on = visible) */
+.site { position: absolute; inset: 0; --dw-media-fit: cover; opacity: 0; transition: opacity 0.45s; }
+.site.on { opacity: 1; }
+
+/* darkens the screenshot while the form card is open */
+.dim { position: absolute; inset: 0; background: rgba(9, 20, 45, 0); transition: background 0.5s; pointer-events: none; }
+.dim.on { background: rgba(9, 20, 45, 0.35); }

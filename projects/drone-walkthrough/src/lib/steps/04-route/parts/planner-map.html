@@ -1,0 +1,56 @@
+<!-- PART planner-map: map layer (image + svg in map px, scaled) · toolbar · legend · attribution -->
+
+<div class="layer" [style.transform]="'translate(' + G.MAP_DX + 'px,0) scale(' + G.MAP_SCALE + ')'">
+  @if (map()?.src) {
+    <img [src]="map()!.src | dwAsset" [alt]="map()!.alt ?? ''" />
+  }
+  <svg viewBox="0 0 1024 640">
+    <!-- safe-height tint inside the field (blue = low, orange = high), like the real planner -->
+    <defs>
+      <radialGradient id="dw-safe" cx="0.55" cy="0.55" r="0.6">
+        <stop offset="0" stop-color="#ff8a3d" stop-opacity="0.35" />
+        <stop offset="0.6" stop-color="#2a7bff" stop-opacity="0.22" />
+        <stop offset="1" stop-color="#2a7bff" stop-opacity="0.12" />
+      </radialGradient>
+    </defs>
+
+    <!-- organisers' rules -->
+    <circle class="field" [attr.cx]="G.FIELD.x" [attr.cy]="G.FIELD.y" [attr.r]="G.FIELD.r" fill="url(#dw-safe)" />
+    <rect class="nofly" [attr.x]="G.NO_FLY.x" [attr.y]="G.NO_FLY.y" [attr.width]="G.NO_FLY.w" [attr.height]="G.NO_FLY.h" />
+    <rect class="landing" [attr.x]="G.LANDING.x" [attr.y]="G.LANDING.y" [attr.width]="G.LANDING.w" [attr.height]="G.LANDING.h" />
+    <rect class="pad" [attr.x]="G.PAD.x - 6" [attr.y]="G.PAD.y - 6" width="12" height="12" />
+    <text class="pad-label" [attr.x]="G.PAD.x + 12" [attr.y]="G.PAD.y + 5">จุดขึ้นบิน</text>
+
+    <!-- team drawing: orbit + route -->
+    @if (orbitR() > 0) {
+      <circle class="orbit" [attr.cx]="G.ORBIT.x" [attr.cy]="G.ORBIT.y" [attr.r]="orbitR()" />
+      <circle class="vertex" [attr.cx]="G.ORBIT.x" [attr.cy]="G.ORBIT.y" r="4" />
+    }
+    <path class="route" [attr.d]="routePath()" />
+    @for (p of placed(); track $index) {
+      <circle class="vertex" [attr.cx]="p.x" [attr.cy]="p.y" r="5" />
+    }
+
+    <!-- labels -->
+    @if (routeDone()) {
+      <g class="label" [attr.transform]="'translate(' + G.LABELS.route.x + ',' + G.LABELS.route.y + ')'">
+        <rect [attr.width]="G.LABELS.route.w" height="22" rx="4" /><text x="8" y="15">{{ G.LABELS.route.text }}</text>
+      </g>
+    }
+    @if (orbitDone()) {
+      <g class="label" [attr.transform]="'translate(' + G.LABELS.orbit.x + ',' + G.LABELS.orbit.y + ')'">
+        <rect [attr.width]="G.LABELS.orbit.w" height="22" rx="4" /><text x="8" y="15">{{ G.LABELS.orbit.text }}</text>
+      </g>
+    }
+  </svg>
+</div>
+
+<!-- toolbar (button centres: toolAt() in route-geometry.ts) -->
+<div class="toolbar">
+  @for (t of G.TOOLS; track t; let i = $index) {
+    <span class="tool" [class.on]="tool() === i">{{ t }}</span>
+  }
+</div>
+
+<div class="legend"><i class="lg w"></i>ขอบสนาม <i class="lg r"></i>ห้ามบิน <i class="lg g"></i>ลงจอด</div>
+<div class="attr">{{ attribution() }}</div>

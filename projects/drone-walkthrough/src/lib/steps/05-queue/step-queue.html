@@ -1,0 +1,37 @@
+<!-- STEP 3.3.5 stage layout: sidebar · queue page / upload page (cross-fade) · tar icon · real-dashboard overlay · cursor -->
+
+<dw-dashboard-nav [teamName]="content().teamName" [page]="page()" />
+
+<!-- page 1: queue -->
+<dw-queue-board class="page" [class.on]="page() === 'queue'" [queue]="content().queue" [slotLabel]="content().slotLabel" [served]="served()" />
+
+<!-- page 2: upload -->
+<dw-tar-upload
+  class="page"
+  [class.on]="page() === 'upload'"
+  [teamName]="content().teamName"
+  [tarName]="content().tarName"
+  [tarFiles]="content().tarFiles"
+  [tarRules]="content().tarRules"
+  [buildChecks]="content().buildChecks"
+  [hover]="hover()"
+  [filesShown]="filesShown()"
+  [checks]="checks()"
+  [ready]="ready()"
+/>
+
+<!-- the tar icon the cursor drags (only on the upload page) -->
+<div [class]="'tar t-' + tar().state" [class.hidden]="page() === 'queue'" [style.left.px]="tar().x - 40" [style.top.px]="tar().y - 36">
+  <span class="t-ico">TAR</span>
+  <small>{{ content().tarName }}</small>
+</div>
+
+<!-- real dashboard (beat 4): empty box for now; set content.queue.dashboardMedia to an image or a video -->
+<div class="media" [class.on]="showMedia()">
+  <div class="m-card">
+    <div class="m-h">ภาพหน้า dashboard จริง</div>
+    <dw-media-slot [media]="content().dashboardMedia" [playing]="active() && showMedia()" emptyLabel="ภาพ / วิดีโอหน้า dashboard" />
+  </div>
+</div>
+
+<dw-cursor [x]="cursor().x" [y]="cursor().y" [visible]="cursor().show" [clicking]="cursor().click" />

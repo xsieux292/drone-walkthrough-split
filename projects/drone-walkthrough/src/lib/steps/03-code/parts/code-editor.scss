@@ -1,0 +1,100 @@
+@use '../../step-common' as *;
+
+// Whole 960×600 scene. Dark navy with a blue glow from the bottom.
+:host { position: absolute; inset: 0; display: block; background: radial-gradient(ellipse at 50% 120%, #14245a 0, #070b18 60%); color: #e6ecff; }
+
+/* ---- background glows ---- */
+.glow { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+.g1 { left: -60px; top: -80px; width: 360px; height: 300px; background: #2a5bff; }
+.g2 { right: -80px; bottom: -60px; width: 380px; height: 300px; background: #00c2ff; opacity: 0.35; }
+
+/* ---- floating chips (positions c1..c4) ---- */
+.chip {
+  position: absolute;
+  z-index: 2;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  animation: dw-float 5s ease-in-out infinite;
+  b { color: #8fb3ff; }
+}
+.c1 { left: 36px; top: 70px; }
+.c2 { right: 30px; top: 110px; animation-delay: -1.5s; }
+.c3 { left: 44px; bottom: 80px; animation-delay: -3s; }
+.c4 { right: 40px; bottom: 60px; animation-delay: -2.2s; }
+
+/* ---- IDE window ---- */
+.ide {
+  position: absolute;
+  left: 110px;
+  top: 46px;
+  width: 740px;
+  height: 508px;
+  display: grid;
+  grid-template-columns: 158px 1fr; // explorer | editor
+  grid-template-rows: 34px 32px 1fr 118px; // title | tabs | code | terminal
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0d1326;
+  border: 1px solid #1e2a4d;
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(143, 179, 255, 0.06), 0 0 60px -10px rgba(42, 91, 255, 0.35);
+}
+.ide-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  background: #0a0f1f;
+  border-bottom: 1px solid #1a2444;
+  .dots { display: flex; gap: 6px; i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; &:nth-child(2) { background: #febc2e; } &:nth-child(3) { background: #28c840; } } }
+}
+.ide-title { flex: 1; text-align: center; margin-right: 50px; font-size: 12px; color: #7d8bb3; }
+
+.tree {
+  grid-row: 2 / -1;
+  padding: 8px 0;
+  background: #0a1022;
+  border-right: 1px solid #1a2444;
+  font-size: 12.5px;
+  color: #93a1c9;
+  .t-h { padding: 4px 14px 8px; font-size: 10.5px; letter-spacing: 0.08em; color: #5d6b93; }
+  .t-d { padding: 3px 12px; color: #c9d4f4; }
+  .t-f { padding: 3px 12px 3px 26px; font-family: var(--dw-mono); font-size: 11.5px; &.on { background: #17244a; color: #fff; box-shadow: inset 2px 0 0 #4d7cff; } }
+  .t-dir { font-family: var(--dw-font); }
+}
+.tabs {
+  display: flex;
+  background: #0a0f1f;
+  border-bottom: 1px solid #1a2444;
+  span { padding: 0 16px; line-height: 32px; font: 12px var(--dw-mono); color: #6f7ca3; border-right: 1px solid #1a2444; &.on { background: #0d1326; color: #fff; box-shadow: inset 0 2px 0 #4d7cff; } }
+}
+.code { display: flex; min-height: 0; overflow: hidden; padding-top: 10px; font: 13px/21px var(--dw-mono); }
+.gutter { display: flex; flex-direction: column; width: 40px; padding-right: 12px; text-align: right; color: #3b4a73; user-select: none; }
+pre { margin: 0; white-space: pre; color: #d6defa; }
+.caret { display: inline-block; width: 8px; height: 16px; vertical-align: -3px; background: #8fb3ff; animation: dw-blink 1s steps(1) infinite; }
+
+.term {
+  grid-column: 2;
+  padding: 6px 14px;
+  border-top: 1px solid #1a2444;
+  background: #080c1a;
+  font: 12px/19px var(--dw-mono);
+  color: #93a1c9;
+  .term-h { margin-bottom: 2px; font-size: 10.5px; letter-spacing: 0.08em; color: #5d6b93; }
+  .tl { animation: dw-pop 0.3s both; }
+  .cmd { color: #e6ecff; }
+}
+
+/* ---- syntax colours (token kinds from util/highlight.ts) ---- */
+.kw { color: #c792ea; }   // keyword
+.str { color: #c3e88d; }  // string
+.com { color: #5f6f99; font-style: italic; } // comment
+.num { color: #f78c6c; }  // number
+.fn { color: #82aaff; }   // function call / def
+.cls { color: #ffcb6b; }  // class name
+.op { color: #89ddff; }   // operator / punctuation

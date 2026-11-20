@@ -1,0 +1,73 @@
+@use '../../step-common' as *;
+
+// Main pane right of the sidebar (190 px). Inside: drop zone / files at (40, 78), checks card at (430, 78).
+:host { position: absolute; left: 190px; top: 0; right: 0; bottom: 0; display: block; padding: 22px 30px; }
+
+header { margin-bottom: 16px; }
+h4 { margin: 0; font-size: 22px; }
+
+/* ---- ① drop zone (340×160; collapses once files show) ---- */
+.drop {
+  position: absolute;
+  left: 40px;
+  top: 78px;
+  width: 340px;
+  height: 160px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 4px;
+  border: 2px dashed #b8c3d6;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--dw-muted);
+  transition: all 0.3s;
+  .d-ico { font-size: 30px; color: var(--dw-accent); }
+  b { color: var(--dw-fg); }
+  small { font-size: 12px; }
+  &.hover { border-color: var(--dw-accent); background: var(--dw-accent-soft); transform: scale(1.02); }
+  &.filled { height: 0; border-width: 0; opacity: 0; }
+}
+
+/* ---- ② files in the tar (dw-tar-contents, compact) ---- */
+.files { position: absolute; left: 40px; top: 70px; width: 370px; transition: opacity 0.3s; }
+.files.hidden { opacity: 0; } // box appears when the tar is dropped
+
+/* ---- ③ checks card ---- */
+.checks {
+  position: absolute;
+  left: 430px;
+  top: 78px;
+  width: 300px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--dw-line);
+}
+.c-h { display: flex; justify-content: space-between; span { font-family: var(--dw-mono); color: var(--dw-muted); } }
+.c-bar { height: 6px; margin: 10px 0 12px; border-radius: 3px; background: #eef2f8; overflow: hidden; i { display: block; height: 100%; background: linear-gradient(90deg, var(--dw-accent), var(--dw-accent-2)); transition: width 0.3s; } }
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: #9aa6ba;
+  .ci { width: 18px; display: grid; place-items: center; font-weight: 700; }
+  .spin { @include spinner(13px, var(--dw-accent)); }
+}
+.c-run { color: var(--dw-fg); }
+.c-ok { color: var(--dw-fg); .ci { color: var(--dw-ok); } }
+.ready {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #e3f7ec;
+  color: #0b7a4b;
+  font-weight: 700;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.4s;
+  &.on { opacity: 1; transform: none; }
+}

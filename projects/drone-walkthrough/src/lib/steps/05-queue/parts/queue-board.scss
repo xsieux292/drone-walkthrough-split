@@ -1,0 +1,46 @@
+@use '../../step-common' as *;
+
+// Main pane right of the sidebar (190 px). The parent fades it in/out.
+:host { position: absolute; left: 190px; top: 0; right: 0; bottom: 0; display: block; padding: 22px 30px; }
+
+header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+h4 { margin: 0; font-size: 22px; }
+.slot { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dw-muted); }
+.skel { display: inline-block; width: 90px; height: 10px; border-radius: 5px; background: #dfe5ef; }
+
+/* ---- banner ---- */
+.banner {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--dw-line);
+  b { font-size: 22px; }
+  span { color: var(--dw-muted); }
+  &.turn { background: linear-gradient(120deg, var(--dw-accent), #4f8bff); border-color: transparent; color: #fff; animation: dw-pulse 1.8s infinite; span { color: #dce7ff; } }
+}
+
+/* ---- rows ---- */
+.rows { display: grid; gap: 8px; }
+.row {
+  display: grid;
+  grid-template-columns: 36px 1fr 140px;
+  align-items: center;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--dw-line);
+  transition: all 0.5s;
+  .pos { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: #eef2f8; font-weight: 700; font-size: 13px; }
+  b { font-family: var(--dw-mono); font-size: 15px; em { margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: var(--dw-accent-soft); color: var(--dw-accent); font: 700 11px var(--dw-font); } }
+  .st { display: flex; align-items: center; gap: 6px; justify-content: flex-end; color: var(--dw-muted); font-size: 13px; }
+  .live { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: dw-blink 1s infinite; }
+}
+.r-done { opacity: 0.45; height: 40px; .pos { background: #d8f3e4; color: var(--dw-ok); } }
+.r-flying { border-color: #fecaca; .st { color: #dc2626; font-weight: 600; } }
+.r-turn { border-color: var(--dw-accent); box-shadow: 0 0 0 3px var(--dw-accent-soft); .st { color: var(--dw-accent); font-weight: 700; } .live { background: var(--dw-accent); } }
+.you:not(.r-turn) { border-color: #b9cdfc; background: #f6f9ff; }

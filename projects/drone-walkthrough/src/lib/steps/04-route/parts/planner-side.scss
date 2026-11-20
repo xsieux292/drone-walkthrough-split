@@ -1,0 +1,67 @@
+@use '../../step-common' as *;
+
+$yellow: #ffd21f;
+
+// 280×556 panel right of the map. The parent positions the host.
+:host {
+  position: absolute;
+  display: block;
+  width: 280px;
+  height: 556px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #151a24;
+  border-left: 1px solid #262d3c;
+  font-size: 13px;
+  color: #e8ecf4;
+}
+
+/* ---- time bar ---- */
+.t-h { display: flex; justify-content: space-between; color: #9aa5ba; b { color: #fff; font-size: 15px; } }
+.t-bar { height: 8px; margin: 8px 0 14px; border-radius: 4px; background: #262d3c; overflow: hidden; i { display: block; height: 100%; background: #22c55e; transition: width 0.2s; } }
+
+/* ---- status ---- */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid #2c3446;
+  color: #9aa5ba;
+  .spin { @include spinner(12px, $yellow); }
+}
+.s-ok { border-color: #22c55e; color: #4ade80; background: rgba(34, 197, 94, 0.08); }
+.s-checking { color: $yellow; }
+
+/* ---- items ---- */
+.list-h { margin: 16px 0 8px; padding-bottom: 8px; border-bottom: 2px solid $yellow; font-weight: 700; width: max-content; }
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #1b2130;
+  border: 1px solid #2c3446;
+  animation: dw-pop 0.35s both;
+  .n { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: #262d3c; font-weight: 700; color: $yellow; }
+  b { display: block; }
+  small { color: #9aa5ba; }
+}
+.empty { color: #6b7488; font-size: 12.5px; }
+
+/* ---- rule checks ---- */
+.checks { margin-top: 12px; }
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  color: #6b7488;
+  .ci { width: 16px; display: grid; place-items: center; font-weight: 700; }
+  .spin { @include spinner(11px, $yellow); }
+}
+.c-run { color: $yellow; }
+.c-ok { color: #cfe9d8; .ci { color: #22c55e; } }

@@ -1,0 +1,21 @@
+<!-- STEP 3.3.4 stage layout: header (44 px) · map (680 wide) | side panel (280) · KML toast · cursor -->
+
+<header class="top">
+  <b>Route Planner</b>
+  <span class="meta">สนาม <b>{{ content().siteName }}</b> · เวลา {{ content().timeLimitS }} s · เพดาน {{ content().ceilingM }} m</span>
+  <span class="team">ทีม 7</span>
+  <!-- save button: its centre is SAVE_BUTTON in route-geometry.ts -->
+  <button type="button" class="save" [class.done]="saved()" tabindex="-1">{{ saved() ? '✓ บันทึกแล้ว' : 'บันทึก' }}</button>
+</header>
+
+<dw-planner-map class="map" [map]="content().map" [attribution]="content().attribution" [tool]="tool()" [points]="points()" [ghost]="ghost()" [orbitR]="orbitR()" />
+
+<dw-planner-side class="side" [timeUsed]="timeUsed()" [timeLimit]="content().timeLimitS" [status]="status()" [items]="items()" [checks]="checks()" />
+
+<!-- result of "บันทึก" -->
+<div class="kml" [class.on]="saved()">
+  <span class="k-ico">KML</span>
+  <div><b>mission.kml</b><small>ระบบเขียนเส้นทาง + กติกาของกรรมการให้อัตโนมัติ</small></div>
+</div>
+
+<dw-cursor [x]="cursor().x" [y]="cursor().y" [visible]="cursor().show" [clicking]="cursor().click" />

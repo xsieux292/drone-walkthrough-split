@@ -1,0 +1,31 @@
+<!-- PART planner-side: time bar · status · items · checks -->
+
+<div class="time">
+  <div class="t-h"><span>เวลาบิน</span><b>{{ timeUsed() }} / {{ timeLimit() }} s</b></div>
+  <div class="t-bar"><i [style.width.%]="timePct()"></i></div>
+</div>
+
+<div [class]="'status s-' + status()">
+  @switch (status()) {
+    @case ('ok') { ✓ ผ่านทุกข้อ · ส่งงานได้ }
+    @case ('checking') { <span class="spin"></span> กำลังตรวจกติกา… }
+    @default { ยังไม่ได้ตรวจ }
+  }
+</div>
+
+<div class="list-h">เส้นทาง ({{ items().length }})</div>
+@for (it of items(); track it.n) {
+  <div class="item"><span class="n">{{ it.n }}</span><div><b>{{ it.name }}</b><small>{{ it.kind }} · {{ it.time }}</small></div></div>
+} @empty {
+  <div class="empty">คลิกบนแผนที่เพื่อวางจุด</div>
+}
+
+@if (status() !== 'draft') {
+  <div class="checks">
+    @for (c of checks(); track c.label) {
+      <div [class]="'check c-' + c.state">
+        <span class="ci">@if (c.state === 'run') {<span class="spin"></span>} @else if (c.state === 'ok') {✓} @else {·}</span>{{ c.label }}
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,89 @@
+@if (showIntro()) {
+  <header class="intro">
+    <span class="eyebrow">{{ content().eyebrow }}</span>
+    <h2>{{ content().title }}</h2>
+    <p>{{ content().lead }}</p>
+  </header>
+}
+
+<nav class="rail" aria-label="ขั้นตอน">
+  @for (s of steps(); track s.id; let i = $index) {
+    <button type="button" class="chip" [class.on]="i === stepIndex()" [class.past]="i < stepIndex()" (click)="jump(i)" [attr.aria-current]="i === stepIndex() ? 'step' : null">
+      <span class="no">{{ s.number }}</span>
+      <span class="t">{{ s.title }}</span>
+      <span class="fill" [style.width.%]="i < stepIndex() ? 100 : i === stepIndex() ? ((beat() + 1) / beatCount()) * 100 : 0"></span>
+    </button>
+  }
+</nav>
+
+<div class="steps">
+  @for (s of steps(); track s.id; let i = $index) {
+    @if (rendered(i)) {
+      <section #section class="step" [attr.data-index]="i" [class.active]="isActive(i)" [attr.aria-labelledby]="'dw-step-' + s.id">
+        <div class="copy">
+          <span class="number">{{ s.number }}</span>
+          <h3 [id]="'dw-step-' + s.id">{{ s.title }}</h3>
+          <p>{{ s.description }}</p>
+          <ol class="beats">
+            @for (b of s.beats; track $index; let bi = $index) {
+              <li>
+                <button
+                  type="button"
+                  [class.on]="isActive(i) && bi === beat()"
+                  [class.done]="isActive(i) ? bi < beat() : i < stepIndex()"
+                  (click)="isActive(i) ? setBeat(bi) : goTo(i, bi, true)"
+                >
+                  <span class="dot">{{ bi + 1 }}</span>
+                  <span class="lbl">{{ b.label }}</span>
+                  @if (isActive(i) && bi === beat() && playing() && autoplay()) {
+                    @for (run of [beatRun()]; track run) {
+                      <span class="timer" [style.animation-duration.ms]="b.ms"></span>
+                    }
+                  }
+                </button>
+              </li>
+            }
+          </ol>
+        </div>
+
+        <div class="stage-wrap">
+          <dw-stage>
+            @switch (s.id) {
+              @case ('register') { <dw-step-register [content]="content().register" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              @case ('dataset') { <dw-step-dataset [content]="content().dataset" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              @case ('code') { <dw-step-code [content]="content().code" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              @case ('route') { <dw-step-route [content]="content().route" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              @case ('queue') { <dw-step-queue [content]="content().queue" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              @case ('results') { <dw-step-results [content]="content().results" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+            }
+          </dw-stage>
+        </div>
+      </section>
+    }
+  }
+</div>
+
+<!-- control bar: SVG icons (unicode ❚❚ / ⛶ render as boxes in some Thai fonts) -->
+<div class="controls" role="toolbar" aria-label="ควบคุมการเล่น">
+  <button type="button" (click)="prev()" [disabled]="isFirst()" aria-label="ย้อนกลับหนึ่งจังหวะ">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+  </button>
+  <button type="button" class="play" (click)="togglePlay()" [attr.aria-label]="playing() && autoplay() ? 'หยุด' : 'เล่นอัตโนมัติ'">
+    @if (playing() && autoplay()) {
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect class="fill" x="6" y="5" width="4" height="14" rx="1" /><rect class="fill" x="14" y="5" width="4" height="14" rx="1" /></svg>
+    } @else {
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+    }
+  </button>
+  <button type="button" (click)="next()" [disabled]="isLast()" aria-label="ไปจังหวะถัดไป">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+  </button>
+  <span class="where">
+    <b>{{ current()?.number }}</b> · {{ beat() + 1 }}/{{ beatCount() }}
+  </span>
+  @if (mode() === 'slides') {
+    <button type="button" class="fs" (click)="fullscreen()" aria-label="เต็มจอ">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></svg>
+    </button>
+  }
+</div>
