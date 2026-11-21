@@ -10,7 +10,7 @@ import { WalkthroughContent } from './models';
 export const DW_DEFAULT_CONTENT: WalkthroughContent = {
   eyebrow: 'หัวข้อ 3.3',
   title: 'เส้นทางของทีม ตั้งแต่สมัครจนได้คะแนน',
-  lead: 'เลื่อนลงเพื่อดูทีละขั้น หรือกด ▶ (ปุ่มลูกศรขวา) เพื่อเดินทีละจังหวะ',
+  lead: 'ปัดหรือลากไปทางซ้ายเพื่อไปขั้นถัดไป กด ▶ เพื่อเล่นอัตโนมัติ หรือใช้ปุ่มลูกศรเดินทีละจังหวะ',
 
   steps: [
     {

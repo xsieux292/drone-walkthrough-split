@@ -1,7 +1,7 @@
 # Walkthrough 3.3 · web animation (Angular)
 
 เว็บอนิเมชันอธิบายขั้นตอน 3.3.1–3.3.6 ทำเป็น Angular component `<dw-walkthrough>` เอาไปใส่ในเว็บหลักได้
-เลื่อนผ่านทีละส่วน (scroll) หรือกดทีละจังหวะ (slides) ได้
+มี 3 โหมด: **เลื่อนซ้าย (carousel, ค่าเริ่มต้น)** ขั้นเรียงเป็นแถวเดียว ขั้นถัดไปเลื่อนเข้ามาจากขวา สูงแค่ขั้นเดียว ประหยัดที่ · เลื่อนลง (scroll) · สไลด์ (slides)
 
 **เว็บจริง:** https://drone-walkthrough-split.vercel.app/ · แบบสไลด์: https://drone-walkthrough-split.vercel.app/?mode=slides
 
@@ -21,7 +21,8 @@ npm start
 
 แล้วเปิด
 
-- http://localhost:4301/ — โหมดเลื่อน (scroll)
+- http://localhost:4301/ — โหมดเลื่อนซ้าย (carousel): ปัด / ลากซ้าย-ขวา, ปัดสองนิ้วบน trackpad, ลูกศรข้างกรอบ หรือคลิกเลขขั้นด้านบน
+- http://localhost:4301/?mode=scroll — โหมดเลื่อนลง (ทุกขั้นเรียงลงมาทั้งหน้า)
 - http://localhost:4301/?mode=slides — โหมดสไลด์ (กดทีละจังหวะ, มีปุ่มเต็มจอ)
 
 (เวอร์ชันนี้ใช้พอร์ต 4301 เวอร์ชันรวมใช้ 4300 เปิดพร้อมกันได้)
@@ -43,7 +44,7 @@ projects/drone-walkthrough/
     ├── content.default.ts        ★ ข้อความ ตัวเลข ภาพ ชื่อจังหวะ และเวลาของแต่ละจังหวะ
     ├── models.ts                 ชนิดข้อมูลของ content
     ├── config.ts                 provideDroneWalkthrough() (assetBase, ป้าย "ต้องเปลี่ยน")
-    ├── walkthrough.ts/.html/.scss  ตัวหลัก: นาฬิกา, โหมด scroll/slides, ปุ่มควบคุม
+    ├── walkthrough.ts/.html/.scss  ตัวหลัก: นาฬิกา, โหมด carousel/scroll/slides, ปัด/ลาก, ปุ่มควบคุม
     ├── shared/                   ชิ้นที่ใช้ร่วมกัน: stage, media-slot, browser-frame, cursor, tar-contents
     ├── util/                     sequencer (ตัวจับเวลา), highlight (สีโค้ด), cursor-script
     └── steps/
@@ -92,6 +93,7 @@ projects/drone-walkthrough/
 | ชื่อชั้นในกล่อง RF-DETR / เส้นกราฟจำลอง | `03-code/parts/train-viz.html` / `train-viz.ts` (`lossAt`, `mapAt`) |
 | ไฟล์ใน tar (แผนภาพ) | `content.default.ts` → `queue.tarFiles`, `queue.tarRules` · หน้าตา: `shared/tar-contents.*` |
 | ตารางคะแนน / ไฟล์ที่ได้รับ | `content.default.ts` → `results.scores`, `results.files` |
+| โหมดเลื่อนซ้าย: ระยะลากที่นับเป็นปัด, ความเร็วเลื่อน | `walkthrough.ts` → `SWIPE_PX` · `walkthrough.scss` → `:host(.mode-carousel) .track` (transition) |
 | สีธีม / ฟอนต์ | ตัวแปร CSS บน `<dw-walkthrough>`: `--dw-accent`, `--dw-bg`, `--dw-fg`, `--dw-font`, ... |
 
 ## ของที่ยังต้องเปลี่ยน / ยังว่าง
@@ -112,7 +114,7 @@ projects/drone-walkthrough/
 2. ใน `angular.json` ของเว็บหลัก เพิ่ม assets:
    `{ "glob": "**/*", "input": "<path>/drone-walkthrough/assets", "output": "assets/drone-walkthrough" }`
 3. ใน `app.config.ts`: `provideDroneWalkthrough({ assetBase: 'assets/drone-walkthrough/', showTodoBadges: true })`
-4. ในหน้า: `<dw-walkthrough mode="scroll" />` หรือ `mode="slides"`
+4. ในหน้า: `<dw-walkthrough />` (เลื่อนซ้าย) หรือ `mode="scroll"` / `mode="slides"`
    inputs อื่น: `content`, `autoplay`, `autoAdvance`, `showIntro`, `keyboard`, `startStep` · output: `(stepChange)`
 5. ฟอนต์: IBM Plex Sans Thai + JetBrains Mono (Google Fonts) ดูตัวอย่างใน `projects/demo/src/index.html`
 

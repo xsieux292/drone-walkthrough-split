@@ -165,7 +165,13 @@ export interface WalkthroughContent {
   results: ResultsContent;
 }
 
-export type WalkthroughMode = 'scroll' | 'slides';
+/**
+ * How the steps are laid out:
+ *   carousel  steps side by side in one row; the next step slides in from the right (one step tall: saves page space)
+ *   scroll    steps stacked down the page; the one in the middle of the viewport plays
+ *   slides    one step at a time filling a fixed-height frame (presenting / screen-recording)
+ */
+export type WalkthroughMode = 'carousel' | 'scroll' | 'slides';
 
 export interface StepChangeEvent {
   stepIndex: number;

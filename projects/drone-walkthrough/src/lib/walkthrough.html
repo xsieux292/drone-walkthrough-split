@@ -16,50 +16,79 @@
   }
 </nav>
 
-<div class="steps">
-  @for (s of steps(); track s.id; let i = $index) {
-    @if (rendered(i)) {
-      <section #section class="step" [attr.data-index]="i" [class.active]="isActive(i)" [attr.aria-labelledby]="'dw-step-' + s.id">
-        <div class="copy">
-          <span class="number">{{ s.number }}</span>
-          <h3 [id]="'dw-step-' + s.id">{{ s.title }}</h3>
-          <p>{{ s.description }}</p>
-          <ol class="beats">
-            @for (b of s.beats; track $index; let bi = $index) {
-              <li>
-                <button
-                  type="button"
-                  [class.on]="isActive(i) && bi === beat()"
-                  [class.done]="isActive(i) ? bi < beat() : i < stepIndex()"
-                  (click)="isActive(i) ? setBeat(bi) : goTo(i, bi, true)"
-                >
-                  <span class="dot">{{ bi + 1 }}</span>
-                  <span class="lbl">{{ b.label }}</span>
-                  @if (isActive(i) && bi === beat() && playing() && autoplay()) {
-                    @for (run of [beatRun()]; track run) {
-                      <span class="timer" [style.animation-duration.ms]="b.ms"></span>
+<!-- steps. carousel: .track is one row moved with translateX (swipe / trackpad / keys); other modes: .track is display: contents -->
+<div
+  #stepsEl
+  class="steps"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerUp($event)"
+  (wheel)="onWheel($event)"
+>
+  <div class="track" [class.dragging]="dragPx() !== 0" [style.transform]="trackTransform()">
+    @for (s of steps(); track s.id; let i = $index) {
+      @if (rendered(i)) {
+        <section
+          #section
+          class="step"
+          [attr.data-index]="i"
+          [class.active]="isActive(i)"
+          [attr.aria-labelledby]="'dw-step-' + s.id"
+          [attr.aria-hidden]="offstage(i) ? 'true' : null"
+          [attr.inert]="offstage(i) ? '' : null"
+        >
+          <div class="copy">
+            <span class="number">{{ s.number }}</span>
+            <h3 [id]="'dw-step-' + s.id">{{ s.title }}</h3>
+            <p>{{ s.description }}</p>
+            <ol class="beats">
+              @for (b of s.beats; track $index; let bi = $index) {
+                <li>
+                  <button
+                    type="button"
+                    [class.on]="isActive(i) && bi === beat()"
+                    [class.done]="isActive(i) ? bi < beat() : i < stepIndex()"
+                    (click)="isActive(i) ? setBeat(bi) : goTo(i, bi, true)"
+                  >
+                    <span class="dot">{{ bi + 1 }}</span>
+                    <span class="lbl">{{ b.label }}</span>
+                    @if (isActive(i) && bi === beat() && playing() && autoplay()) {
+                      @for (run of [beatRun()]; track run) {
+                        <span class="timer" [style.animation-duration.ms]="b.ms"></span>
+                      }
                     }
-                  }
-                </button>
-              </li>
-            }
-          </ol>
-        </div>
+                  </button>
+                </li>
+              }
+            </ol>
+          </div>
 
-        <div class="stage-wrap">
-          <dw-stage>
-            @switch (s.id) {
-              @case ('register') { <dw-step-register [content]="content().register" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-              @case ('dataset') { <dw-step-dataset [content]="content().dataset" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-              @case ('code') { <dw-step-code [content]="content().code" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-              @case ('route') { <dw-step-route [content]="content().route" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-              @case ('queue') { <dw-step-queue [content]="content().queue" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-              @case ('results') { <dw-step-results [content]="content().results" [active]="isActive(i)" [beat]="beatFor(i)" /> }
-            }
-          </dw-stage>
-        </div>
-      </section>
+          <div class="stage-wrap">
+            <dw-stage>
+              @switch (s.id) {
+                @case ('register') { <dw-step-register [content]="content().register" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+                @case ('dataset') { <dw-step-dataset [content]="content().dataset" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+                @case ('code') { <dw-step-code [content]="content().code" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+                @case ('route') { <dw-step-route [content]="content().route" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+                @case ('queue') { <dw-step-queue [content]="content().queue" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+                @case ('results') { <dw-step-results [content]="content().results" [active]="isActive(i)" [beat]="beatFor(i)" /> }
+              }
+            </dw-stage>
+          </div>
+        </section>
+      }
     }
+  </div>
+
+  <!-- carousel only: previous / next STEP arrows on the edges (hidden on phones, swipe there) -->
+  @if (mode() === 'carousel') {
+    <button type="button" class="edge prev" (click)="goStep(-1)" [disabled]="stepIndex() === 0" aria-label="ขั้นก่อนหน้า">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+    </button>
+    <button type="button" class="edge next" (click)="goStep(1)" [disabled]="stepIndex() === steps().length - 1" aria-label="ขั้นถัดไป">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+    </button>
   }
 </div>
 
