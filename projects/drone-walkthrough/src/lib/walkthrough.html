@@ -1,6 +1,6 @@
 @if (showIntro()) {
   <header class="intro">
-    <span class="eyebrow">{{ content().eyebrow }}</span>
+    @if (content().eyebrow) { <span class="eyebrow">{{ content().eyebrow }}</span> }
     <h2>{{ content().title }}</h2>
     <p>{{ content().lead }}</p>
   </header>

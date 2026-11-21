@@ -58,7 +58,7 @@ projects/drone-walkthrough/
         │   └── parts/hf-page.* · download-terminal.ts
         ├── 03-code/              3.3.3 เขียนโค้ด + fine-tune
         │   ├── step-code.ts
-        │   └── parts/code-editor.* (ฉาก IDE) · train-viz.* (ฉากเทรน RF-DETR)
+        │   └── parts/code-editor.* (ฉาก IDE) · train-viz.* (ฉากฝึกสอนโมเดล)
         ├── 04-route/             3.3.4 วางแผนการบิน
         │   ├── step-route.* · route-geometry.ts (พิกัดทั้งหมดบนแผนที่)
         │   └── parts/planner-map.* · planner-side.*
@@ -90,7 +90,7 @@ projects/drone-walkthrough/
 | เส้นทาง / วงโคจร / เขตห้ามบินบนแผนที่ | `04-route/route-geometry.ts` (`ROUTE`, `ORBIT`, `NO_FLY`, ...) |
 | หน้าตาชิ้นใดชิ้นหนึ่ง (ฟอร์ม, หน้า HF, IDE, แผนที่, คิว, ตารางคะแนน ...) | `steps/0X-*/parts/<ชิ้นนั้น>.*` |
 | ป้ายบนชิปลอย ๆ ในฉากโค้ด | `03-code/parts/code-editor.html` (ค้นคำว่า chip) |
-| ชื่อชั้นในกล่อง RF-DETR / เส้นกราฟจำลอง | `03-code/parts/train-viz.html` / `train-viz.ts` (`lossAt`, `mapAt`) |
+| ชื่อชั้นในกล่องโมเดล / เส้นกราฟจำลอง / ตัวเลขในแถบ epoch | `03-code/parts/train-viz.html` / `train-viz.ts` (`lossAt`, `mapAt`, `TRAIN_IMAGES`, `BASE_LR`, `SEC_PER_EPOCH`) · ชื่อโมเดลที่แสดง: `content.default.ts` → `code.train.model` |
 | ไฟล์ใน tar (แผนภาพ) | `content.default.ts` → `queue.tarFiles`, `queue.tarRules` · หน้าตา: `shared/tar-contents.*` |
 | ตารางคะแนน / ไฟล์ที่ได้รับ | `content.default.ts` → `results.scores`, `results.files` |
 | โหมดเลื่อนซ้าย: ระยะลากที่นับเป็นปัด, ความเร็วเลื่อน | `walkthrough.ts` → `SWIPE_PX` · `walkthrough.scss` → `:host(.mode-carousel) .track` (transition) |

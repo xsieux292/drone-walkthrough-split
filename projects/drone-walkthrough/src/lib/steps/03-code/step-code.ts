@@ -11,7 +11,7 @@ import { DwTrainViz } from './parts/train-viz';
  *
  * This file = the TIMELINE only. Two scenes cross-fade on one stage:
  *   parts/code-editor.*   scene "editor": IDE window typing the files in content.code.files
- *   parts/train-viz.*     scene "train":  dataset → RF-DETR → boxes converge, charts, weights card
+ *   parts/train-viz.*     scene "train":  dataset → model block → boxes converge, charts, weights card
  *
  * Beats (labels + durations: content.default.ts → steps[2].beats):
  *   0  type files[0] (train.py), then terminal lines appear

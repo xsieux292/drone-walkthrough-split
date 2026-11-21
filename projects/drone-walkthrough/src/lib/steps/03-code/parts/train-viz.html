@@ -1,7 +1,7 @@
-<!-- PART train-viz. Left → right: conveyor of dataset images · flow dots · RF-DETR block · flow dots · preview + stats -->
+<!-- PART train-viz. Left → right: conveyor of dataset images · flow dots · model block · flow dots · preview + training stats (dev / dashboard look) -->
 
 <!-- ① dataset images (real frames from datasets/03_yolo_format) -->
-<div class="col-label">ภาพจาก dataset</div>
+<div class="col-label"><span>data/train</span> · {{ TRAIN_IMAGES.toLocaleString() }} images</div>
 <div class="conveyor">
   <div class="belt">
     @for (img of conveyor(); track $index) {
@@ -11,14 +11,14 @@
 </div>
 <div class="flow f1"><i></i><i></i><i></i></div>
 
-<!-- ② model block (layer names: edit here) -->
+<!-- ② model block: generic layer names on purpose (the walkthrough must not reveal which model to use) -->
 <div class="model">
   <div class="m-title">{{ train().model }}</div>
-  <div class="layer">Backbone · DINOv2</div>
-  <div class="layer">Multi-scale projector</div>
-  <div class="layer">Transformer decoder</div>
-  <div class="layer">Heads · box + class</div>
-  <div class="m-foot">fine-tune · truck</div>
+  <div class="layer">Backbone <small>pretrained</small></div>
+  <div class="layer">Feature neck</div>
+  <div class="layer">Detection head</div>
+  <div class="layer">Output <small>box + class</small></div>
+  <div class="m-foot">fine-tune · 1 class (truck)</div>
 </div>
 <div class="flow f2"><i></i><i></i><i></i></div>
 
@@ -41,31 +41,41 @@
       }
     }
   </svg>
-  <span class="legend"><i class="lg-gt"></i>label จริง <i class="lg-pred"></i>โมเดลทาย</span>
+  <span class="legend"><i class="lg-gt"></i>ground truth <i class="lg-pred"></i>prediction</span>
+  <span class="p-head">val · sample {{ (previewIndex() + 1).toString().padStart(3, '0') }}</span>
 </div>
 
-<!-- ④ epoch counter -->
+<!-- ④ training progress, styled like a training log (tqdm-like bar + stats line) -->
 <div class="epoch">
-  <span>Epoch</span>
-  <b>{{ epoch() }}</b><small>/ {{ train().epochs }}</small>
+  <div class="e-row">
+    <span class="e-k">Epoch</span>
+    <b>{{ epoch() }}</b><small>/{{ train().epochs }}</small>
+    <span class="e-pct">{{ (progress() * 100).toFixed(0) }}%</span>
+  </div>
   <div class="ebar"><i [style.width.%]="progress() * 100"></i></div>
+  <div class="e-stats">
+    step {{ globalStep().toLocaleString() }}/{{ totalSteps().toLocaleString() }} · lr {{ lrNow() }} · {{ itPerSec() }} it/s · ETA {{ eta() }}
+  </div>
 </div>
 
 <!-- ⑤ mini charts -->
 <div class="chart ch1">
-  <div class="ch-h"><span>loss</span><b>{{ progress() > 0 ? lossNow().toFixed(3) : '' }}</b></div>
+  <div class="ch-h"><span>train/loss</span><b>{{ progress() > 0 ? lossNow().toFixed(3) : '' }}</b></div>
   <svg [attr.viewBox]="'0 0 ' + CHART.w + ' ' + CHART.h"><path class="axis" d="M0 55.5H180" /><path class="loss" [attr.d]="lossPath()" /></svg>
 </div>
 <div class="chart ch2">
-  <div class="ch-h"><span>mAP&#64;50</span><b>{{ progress() > 0 ? mapNow().toFixed(2) : '' }}</b></div>
+  <div class="ch-h"><span>val/mAP&#64;50</span><b>{{ progress() > 0 ? mapNow().toFixed(2) : '' }}</b></div>
   <svg [attr.viewBox]="'0 0 ' + CHART.w + ' ' + CHART.h"><path class="axis" d="M0 55.5H180" /><path class="map" [attr.d]="mapPath()" /></svg>
 </div>
 @if (train().metricsAreIllustrative) {
-  <div class="illus">กราฟและตัวเลขเป็นภาพจำลอง ไม่ใช่ผลเทรนจริง</div>
+  <div class="illus">* ค่าในกราฟและตัวเลขเป็นข้อมูลจำลองเพื่อการสาธิต</div>
 }
 
 <!-- ⑥ finished weights -->
 <div class="weights" [class.on]="weights()">
   <span class="w-ico">⬢</span>
-  <div><b>{{ train().weightsName }}</b><small>✓ เทรนเสร็จ · พร้อมใส่ใน tar</small></div>
+  <div>
+    <b>runs/truck/{{ train().weightsName }}</b>
+    <small>✓ best checkpoint · val/mAP&#64;50 {{ mapNow().toFixed(2) }} · พร้อมบรรจุลงไฟล์ tar</small>
+  </div>
 </div>

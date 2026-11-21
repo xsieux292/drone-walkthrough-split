@@ -153,6 +153,7 @@ export interface ResultsContent {
 }
 
 export interface WalkthroughContent {
+  /** Small badge above the title. Empty string = no badge. */
   eyebrow: string;
   title: string;
   lead: string;

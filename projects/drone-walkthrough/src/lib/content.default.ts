@@ -8,34 +8,34 @@ import { WalkthroughContent } from './models';
  * Empty strings / null values are deliberately blank: no data yet.
  */
 export const DW_DEFAULT_CONTENT: WalkthroughContent = {
-  eyebrow: 'หัวข้อ 3.3',
-  title: 'เส้นทางของทีม ตั้งแต่สมัครจนได้คะแนน',
-  lead: 'ปัดหรือลากไปทางซ้ายเพื่อไปขั้นถัดไป กด ▶ เพื่อเล่นอัตโนมัติ หรือใช้ปุ่มลูกศรเดินทีละจังหวะ',
+  eyebrow: '', // small badge above the title; empty = hidden
+  title: 'ขั้นตอนการเข้าร่วมการแข่งขัน',
+  lead: 'ภาพรวมกระบวนการตั้งแต่การสมัครจนถึงการรับผลคะแนน เลื่อนไปทางซ้ายหรือกดลูกศรเพื่อดูขั้นตอนถัดไป และกด ▶ เพื่อเล่นอัตโนมัติ',
 
   steps: [
     {
       id: 'register',
       number: '1',
-      title: 'สมัคร และตอบคำถามผ่านเว็บ',
-      description: 'ทีมเข้าเว็บไซต์ nt-drone.ntplc.co.th กดสมัคร ยินยอมให้เก็บเอกสาร กรอกข้อมูลทีม อาจารย์ที่ปรึกษา สมาชิก และทักษะของทีม แล้วยืนยันการลงทะเบียน',
+      title: 'การสมัครเข้าร่วมการแข่งขัน',
+      description: 'ทีมผู้สมัครลงทะเบียนผ่านเว็บไซต์ nt-drone.ntplc.co.th โดยให้ความยินยอมในการจัดเก็บเอกสาร กรอกข้อมูลทีม อาจารย์ที่ปรึกษา และสมาชิก พร้อมตอบคำถามด้านทักษะและประสบการณ์ จากนั้นยืนยันการลงทะเบียน',
       beats: [
-        { label: 'เปิดเว็บไซต์ กด "สมัครแข่งขัน"', ms: 3200 },
-        { label: 'ยินยอมให้เก็บเอกสารสมัคร', ms: 2800 },
+        { label: 'เข้าสู่เว็บไซต์และเลือก "สมัครแข่งขัน"', ms: 3200 },
+        { label: 'ให้ความยินยอมในการจัดเก็บเอกสาร', ms: 2800 },
         { label: 'กรอกข้อมูลทีมและอาจารย์ที่ปรึกษา', ms: 4000 },
-        { label: 'ข้อมูลสมาชิก และตอบคำถามทักษะ', ms: 3800 },
+        { label: 'กรอกข้อมูลสมาชิกและตอบคำถามด้านทักษะ', ms: 3800 },
         { label: 'ยืนยันการลงทะเบียน', ms: 3000 },
       ],
     },
     {
       id: 'dataset',
       number: '2',
-      title: 'รับสิทธิ์เข้าถึง dataset',
-      description: 'เมื่อผ่านการสมัคร ทีมกดขอสิทธิ์บน Hugging Face แล้วดาวน์โหลดชุดข้อมูลภาพรถบรรทุกไปใช้เทรน',
+      title: 'การขอสิทธิ์เข้าถึงชุดข้อมูล',
+      description: 'เมื่อผ่านการคัดเลือก ทีมยื่นขอสิทธิ์เข้าถึงชุดข้อมูลบน Hugging Face และดาวน์โหลดชุดข้อมูลภาพรถบรรทุกสำหรับใช้ในการพัฒนาโมเดล',
       beats: [
-        { label: 'เปิดหน้า dataset บน Hugging Face', ms: 2800 },
-        { label: 'กด "Agree and access repository"', ms: 3200 },
-        { label: 'ได้สิทธิ์ เห็นไฟล์ทั้งหมด', ms: 3600 },
-        { label: 'ดาวน์โหลดลงเครื่อง', ms: 3600 },
+        { label: 'เปิดหน้าชุดข้อมูลบน Hugging Face', ms: 2800 },
+        { label: 'ยอมรับเงื่อนไขการเข้าถึงชุดข้อมูล', ms: 3200 },
+        { label: 'ได้รับสิทธิ์และตรวจสอบรายการไฟล์', ms: 3600 },
+        { label: 'ดาวน์โหลดชุดข้อมูล', ms: 3600 },
         // To show a real screenshot as a 5th beat: set dataset.media below, then add
         // { label: 'ภาพหน้าจริง', ms: 3400 },
       ],
@@ -43,51 +43,51 @@ export const DW_DEFAULT_CONTENT: WalkthroughContent = {
     {
       id: 'code',
       number: '3',
-      title: 'เขียนโค้ด และ fine-tune โมเดล',
-      description: 'เขียนสคริปต์เทรน RF-DETR ด้วยภาพจาก dataset แล้วเขียน my_agent.py ให้โดรนเรียกใช้โมเดล',
+      title: 'การพัฒนาและฝึกสอนโมเดล',
+      description: 'ทีมพัฒนาสคริปต์สำหรับฝึกสอน (fine-tune) โมเดลตรวจจับวัตถุที่ทีมเลือกใช้ด้วยชุดข้อมูลที่ได้รับ และพัฒนาไฟล์ my_agent.py เพื่อให้ระบบควบคุมโดรนเรียกใช้โมเดลระหว่างการบิน',
       beats: [
-        { label: 'เขียน train.py', ms: 5200 },
-        { label: 'เขียน my_agent.py', ms: 5600 },
-        { label: 'ป้อนภาพ dataset เข้า RF-DETR', ms: 3600 },
-        { label: 'เทรนหลาย epoch', ms: 6000 },
-        { label: 'ได้ไฟล์ weights', ms: 3000 },
+        { label: 'พัฒนาสคริปต์ฝึกสอน train.py', ms: 5200 },
+        { label: 'พัฒนาไฟล์ my_agent.py', ms: 5600 },
+        { label: 'นำเข้าชุดข้อมูลสู่โมเดล', ms: 3600 },
+        { label: 'ฝึกสอนโมเดลตามจำนวน epoch ที่กำหนด', ms: 6000 },
+        { label: 'บันทึกไฟล์ weights ของโมเดล', ms: 3000 },
       ],
     },
     {
       id: 'route',
       number: '4',
-      title: 'วางแผนการบิน',
-      description: 'วาดเส้นทางบนเว็บ Route Planner ระบบตรวจกติกา (ขอบสนาม เขตห้ามบิน ความสูง เวลา) ให้ทันที แล้วบันทึกเป็น mission.kml',
+      title: 'การวางแผนเส้นทางการบิน',
+      description: 'ทีมกำหนดเส้นทางการบินผ่านเว็บไซต์ Route Planner โดยระบบตรวจสอบความสอดคล้องกับกติกาแบบทันที ได้แก่ ขอบเขตสนาม เขตห้ามบิน ระดับความสูง และเวลาบิน จากนั้นบันทึกเป็นไฟล์ mission.kml',
       beats: [
-        { label: 'เลือกเครื่องมือเส้นทาง', ms: 2400 },
-        { label: 'คลิกวางจุดบนแผนที่', ms: 4200 },
-        { label: 'เพิ่มวงกลมรอบเป้าหมาย', ms: 3200 },
-        { label: 'ระบบตรวจกติกา', ms: 3000 },
-        { label: 'บันทึก mission.kml', ms: 2800 },
+        { label: 'เลือกเครื่องมือกำหนดเส้นทาง', ms: 2400 },
+        { label: 'กำหนดจุดอ้างอิงบนแผนที่', ms: 4200 },
+        { label: 'กำหนดเส้นทางวงรอบพื้นที่เป้าหมาย', ms: 3200 },
+        { label: 'ตรวจสอบความสอดคล้องกับกติกา', ms: 3000 },
+        { label: 'บันทึกไฟล์ mission.kml', ms: 2800 },
       ],
     },
     {
       id: 'queue',
       number: '5',
-      title: 'รอคิว และส่งไฟล์ tar ผ่าน dashboard',
-      description: 'รอถึงคิวเวลาของทีม แล้วลากไฟล์ tar (โค้ด + weights + mission.kml) ใส่หน้า dashboard ระบบตรวจและ build ให้',
+      title: 'การรอคิวและส่งไฟล์ผลงาน',
+      description: 'เมื่อถึงช่วงเวลาที่ได้รับการจัดสรร ทีมอัปโหลดไฟล์ tar ซึ่งประกอบด้วยซอร์สโค้ด ไฟล์ weights และ mission.kml ผ่านหน้า dashboard จากนั้นระบบตรวจสอบไฟล์และ build โดยอัตโนมัติ',
       beats: [
-        { label: 'รอคิวเวลา', ms: 4200 },
+        { label: 'รอคิวตามช่วงเวลาที่จัดสรร', ms: 4200 },
         { label: 'ถึงคิวของทีม', ms: 2400 },
-        { label: 'ลากไฟล์ tar ใส่ dashboard', ms: 3800 },
-        { label: 'ตรวจไฟล์และ build', ms: 4200 },
-        { label: 'หน้า dashboard จริง', ms: 4000 },
+        { label: 'อัปโหลดไฟล์ tar ผ่าน dashboard', ms: 3800 },
+        { label: 'ระบบตรวจสอบไฟล์และ build', ms: 4200 },
+        { label: 'ตัวอย่างหน้า dashboard', ms: 4000 },
       ],
     },
     {
       id: 'results',
       number: '6',
-      title: 'บินจริง รับคะแนน และไฟล์ผลลัพธ์',
-      description: 'โดรนบินตามโค้ดของทีม จากนั้นทีมได้ตารางคะแนนและไฟล์ผลการบินกลับไป',
+      title: 'การบินจริงและการประกาศผล',
+      description: 'โดรนปฏิบัติภารกิจตามโค้ดและเส้นทางของทีม เมื่อเสร็จสิ้น ทีมจะได้รับตารางคะแนนและไฟล์ผลการบินสำหรับการตรวจสอบ',
       beats: [
-        { label: 'คลิปบินจริง', ms: 7000 },
-        { label: 'ตารางคะแนน', ms: 4200 },
-        { label: 'ไฟล์ที่ได้รับ', ms: 4000 },
+        { label: 'การบินปฏิบัติภารกิจ', ms: 7000 },
+        { label: 'สรุปผลคะแนน', ms: 4200 },
+        { label: 'ไฟล์ผลลัพธ์ที่ได้รับ', ms: 4000 },
       ],
     },
   ],
@@ -134,41 +134,40 @@ export const DW_DEFAULT_CONTENT: WalkthroughContent = {
       {
         name: 'train.py',
         lang: 'python',
-        code: `from rfdetr import RFDETRBase
+        code: `from your_model import YourModel   # the detector your team chooses
 
-# fine-tune RF-DETR on the competition truck dataset (COCO layout)
-model = RFDETRBase()
+# fine-tune on the competition truck dataset
+model = YourModel(pretrained=True)
 model.train(
-    dataset_dir="data/datasets_rfdetr",
+    data="data/truck_dataset",
     epochs=30,
     batch_size=8,
-    grad_accum_steps=2,
     lr=1e-4,
     output_dir="runs/truck",
 )
-# -> runs/truck/checkpoint_best_ema.pth`,
+model.save("runs/truck/model.pth")   # -> put model.pth in the tar`,
       },
       {
         name: 'my_agent.py',
         lang: 'python',
         code: `class MyDetector(Detector):
-    def load(self, weights="checkpoint_best_ema.pth", conf=0.3, **options):
-        from rfdetr import RFDETRBase
-        self.model = RFDETRBase(pretrain_weights=os.path.join(HERE, weights))
+    def load(self, weights="model.pth", conf=0.3, **options):
+        from your_model import YourModel   # import heavy libraries here
+        self.model = YourModel.load(os.path.join(HERE, weights))
         self.conf = conf
 
     def detect(self, image, hint=None):
-        det = self.model.predict(image, threshold=self.conf)
-        return [Detection("truck", float(c), tuple(map(float, b)))
-                for b, c in zip(det.xyxy, det.confidence)]`,
+        boxes, scores = self.model.predict(image)
+        return [Detection("truck", float(s), tuple(map(float, b)))
+                for b, s in zip(boxes, scores) if s >= self.conf]`,
       },
     ],
-    terminal: ['$ python train.py', 'loading dataset … train 3,848 · valid 481 · test 482', 'model RF-DETR base · device cuda'],
+    terminal: ['$ python train.py', 'loading dataset … train 3,848 · valid 481 · test 482', 'model YourModel (pretrained) · device cuda:0 · batch 8'],
     train: {
-      model: 'RF-DETR',
+      model: 'Your Model', // shown on the model block; keep generic (do not reveal a specific architecture)
       epochs: 30,
       metricsAreIllustrative: true,
-      weightsName: 'checkpoint_best_ema.pth',
+      weightsName: 'model.pth',
       images: [
         { src: 'dataset/truck_0000.jpg', boxes: [[0.4996, 0.6243, 0.1664, 0.2208]] },
         { src: 'dataset/truck_0200.jpg', boxes: [[0.4723, 0.5687, 0.1148, 0.1986]] },

@@ -3,7 +3,7 @@ import { DwAssetPipe } from '../../../config';
 import { TrainContent } from '../../../models';
 
 /**
- * PART · 3.3.3 · Training scene: dataset images on a conveyor → RF-DETR block → preview with boxes,
+ * PART · 3.3.3 · Training scene: dataset images on a conveyor → model block ("Your Model", generic layers) → preview with boxes,
  * epoch counter, loss and mAP mini charts, and the weights file card.
  *
  * Purely visual. Everything follows one number, `progress` (0..1 of the training run):
@@ -25,6 +25,16 @@ const PREVIEW = { w: 400, h: 225 };
 const CHART = { w: 180, h: 56 };
 /** How many times the preview image changes during one run. */
 const PREVIEW_CHANGES = 10;
+
+// ── Numbers for the training-log line (illustrative, consistent with content.code.terminal) ──
+/** Training images (train split) and batch size → steps per epoch. */
+const TRAIN_IMAGES = 3848;
+const BATCH = 8;
+const STEPS_PER_EPOCH = Math.ceil(TRAIN_IMAGES / BATCH);
+/** Learning rate: cosine decay from BASE_LR to MIN_LR over the run. Seconds per epoch for the ETA. */
+const BASE_LR = 1e-4;
+const MIN_LR = 1e-6;
+const SEC_PER_EPOCH = 141;
 
 interface Box {
   x: number;
@@ -68,9 +78,23 @@ export class DwTrainViz {
   readonly weights = input(false);
 
   protected readonly PREVIEW = PREVIEW;
+  protected readonly TRAIN_IMAGES = TRAIN_IMAGES;
   protected readonly CHART = CHART;
 
   protected readonly epoch = computed(() => (this.progress() > 0 ? Math.max(1, Math.round(this.progress() * this.train().epochs)) : 0));
+  protected readonly totalSteps = computed(() => STEPS_PER_EPOCH * this.train().epochs);
+  protected readonly globalStep = computed(() => Math.round(this.progress() * this.totalSteps()));
+  /** Cosine-decayed learning rate, e.g. "5.1e-5". */
+  protected readonly lrNow = computed(() => (MIN_LR + (BASE_LR - MIN_LR) * 0.5 * (1 + Math.cos(Math.PI * this.progress()))).toExponential(1));
+  /** Throughput with a little wobble so it looks live. */
+  protected readonly itPerSec = computed(() => (3.4 + 0.15 * Math.sin(this.progress() * 57)).toFixed(1));
+  /** Remaining time as mm:ss (hh:mm:ss above an hour). */
+  protected readonly eta = computed(() => {
+    const left = Math.round((1 - this.progress()) * this.train().epochs * SEC_PER_EPOCH);
+    const h = Math.floor(left / 3600), m = Math.floor((left % 3600) / 60), sec = left % 60;
+    const mmss = String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+    return h ? h + ':' + mmss : mmss;
+  });
   protected readonly previewIndex = computed(() => {
     const n = this.train().images.length;
     return n ? Math.floor(this.progress() * (PREVIEW_CHANGES - 0.001)) % n : 0;

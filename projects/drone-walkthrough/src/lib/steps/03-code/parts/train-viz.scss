@@ -4,7 +4,7 @@
 :host { position: absolute; inset: 0; display: block; background: radial-gradient(ellipse at 30% 0%, #13214f 0, #070b18 55%); color: #e6ecff; }
 
 /* ---- ① conveyor ---- */
-.col-label { position: absolute; left: 30px; top: 24px; font-size: 13px; color: #8fa0cc; letter-spacing: 0.03em; }
+.col-label { position: absolute; left: 30px; top: 24px; font: 12px var(--dw-mono); color: #8fa0cc; span { color: #c7d3f7; } }
 .conveyor {
   position: absolute;
   left: 30px;
@@ -50,6 +50,7 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   text-align: center;
   .m-title { margin-bottom: 12px; font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #8fb3ff, #5fe1ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .layer small { margin-left: 4px; color: #7f8fbb; font-size: 10.5px; }
   .layer { margin: 7px 0; padding: 8px 6px; border-radius: 9px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(143, 179, 255, 0.18); font-size: 12px; color: #c7d3f7; }
   .m-foot { margin-top: 10px; font-size: 11px; color: #7f8fbb; }
 }
@@ -80,6 +81,7 @@
   .tag { fill: #39ff88; }
   text { font: 700 10px var(--dw-mono); fill: #04210f; }
 }
+.p-head { position: absolute; right: 8px; top: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.55); font: 11px var(--dw-mono); color: #c7d3f7; }
 .legend {
   position: absolute;
   left: 8px;
@@ -100,22 +102,35 @@
 .epoch {
   position: absolute;
   left: 500px;
-  top: 284px;
+  top: 276px;
   width: 400px;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
-  span { font-size: 14px; color: #8fa0cc; }
-  b { font: 700 38px/1 var(--dw-mono); }
-  small { color: #8fa0cc; font-size: 16px; }
-  .ebar { flex-basis: 100%; height: 6px; margin-top: 4px; border-radius: 3px; background: #1a2550; overflow: hidden; i { display: block; height: 100%; background: linear-gradient(90deg, #4d7cff, #5fe1ff); } }
+  box-sizing: border-box;
+  padding: 10px 14px 9px;
+  border-radius: 12px;
+  background: #060a16;
+  border: 1px solid #1e2a4d;
+  font-family: var(--dw-mono);
+  .e-row { display: flex; align-items: baseline; gap: 6px; }
+  .e-k { font-size: 12px; color: #8fa0cc; text-transform: uppercase; letter-spacing: 0.08em; }
+  b { font: 700 26px/1 var(--dw-mono); color: #fff; }
+  small { color: #8fa0cc; font-size: 14px; }
+  .e-pct { margin-left: auto; font-size: 13px; color: #5fe1ff; }
+  // tqdm-like bar: segmented fill
+  .ebar {
+    height: 8px;
+    margin: 7px 0 6px;
+    border-radius: 2px;
+    background: repeating-linear-gradient(90deg, #1a2550 0 6px, transparent 6px 8px);
+    overflow: hidden;
+    i { display: block; height: 100%; background: repeating-linear-gradient(90deg, #4d7cff 0 6px, transparent 6px 8px); }
+  }
+  .e-stats { font-size: 11px; color: #7f8fbb; white-space: nowrap; }
 }
 
 /* ---- ⑤ charts ---- */
 .chart {
   position: absolute;
-  top: 360px;
+  top: 362px;
   width: 190px;
   padding: 10px 12px;
   border-radius: 12px;
@@ -130,13 +145,13 @@
 .ch1 { left: 500px; }
 .ch2 { left: 710px; }
 .ch-h { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; color: #8fa0cc; b { font-family: var(--dw-mono); color: #e6ecff; } }
-.illus { position: absolute; left: 500px; top: 458px; font-size: 11.5px; color: #ffb35c; }
+.illus { position: absolute; left: 500px; top: 462px; font-size: 11px; color: #c99a5a; }
 
 /* ---- ⑥ weights card ---- */
 .weights {
   position: absolute;
   left: 500px;
-  top: 490px;
+  top: 484px;
   width: 400px;
   display: flex;
   align-items: center;
